@@ -3,7 +3,7 @@
 require include/linux-caf.inc
 
 FILESPATH =+ "${WORKSPACE}:"
-SRC_URI = "file://linux"
+SRC_URI = "git://codeaurora.org/kernel/msm;tag=LNX.LA.3.5.2-09410-8x74.0;protocol=git;bareclone=1;nobranch=1"
 SRC_URI += "file://defconfig \
             file://${MACHINE}.scc \
             file://${MACHINE}-user-config.cfg \

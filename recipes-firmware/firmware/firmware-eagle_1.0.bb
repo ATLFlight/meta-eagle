@@ -14,7 +14,6 @@ inherit allarch
 
 do_install() {
     simg2img ${WORKDIR}/Flight_3.0_apq8074-le-1-0_ap_standard_oem_r00015/Flight_3.0_apq8074-le-1-0_ap_standard_oem_r00015/binaries/Flight_BSP_3.0/cache.img ${WORKDIR}/cache.img.raw
-    cp ${WORKDIR}/cache.img.raw
     install -d ${D}/lib/firmware
     for f in `e2ls ${WORKDIR}/cache.img.raw`; do 
 	e2cp ${WORKDIR}/cache.img.raw:$f ${D}/lib/firmware
