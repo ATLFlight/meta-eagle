@@ -36,36 +36,4 @@ do_after_unpack() {
     rm -f ${WORKDIR}/bluetooth.patch.done
 }
 
-# Override BT kernel driver files with the ones from upstream kernel v4.2.6
-# in order to support the bluez BT protocol stack
-do_override_bluetooth_files() {
-    btsrc=${DL_DIR}/linux-v4.2.6
-    btdst=${WORKDIR}/linux
-
-    # If the 4.2.6 kernel tree hasn't been cloned yet, do so now.
-    if [ ! -d ${btsrc} ]; then
-        git clone -b v4.2.6 --depth 1 git://codeaurora.org/quic/la/kernel/msm.git ${btsrc}
-        cd ${btsrc}
-        git checkout v4.2.6
-        cd -
-    fi
-
-    # If we haven't already replaced and patched the BT kernel driver
-    # files, do so now
-    if [ ! -f ${WORKDIR}/bluetooth.patch.done ]; then
-        # If haven't already done so, apply the patch to re-enable sleep
-        # and power mgmt
-        /bin/cp -fr ${btsrc}/net/bluetooth/* ${btdst}/net/bluetooth
-        /bin/cp -fr ${btsrc}/include/net/bluetooth/* ${btdst}/include/net/bluetooth
-        /bin/cp -fr ${btsrc}/drivers/bluetooth/* ${btdst}/drivers/bluetooth
-
-        cd ${btdst}
-        patch -p1 < ${WORKDIR}/bluetooth.patch
-        touch ${WORKDIR}/bluetooth.patch.done
-        cd -
-    fi
-}
-
 addtask rem_old_linux after do_cleansstate before do_cleanall
-addtask do_after_unpack after do_unpack before do_override_bluetooth_files
-addtask do_override_bluetooth_files after do_kernel_checkout before do_patch
